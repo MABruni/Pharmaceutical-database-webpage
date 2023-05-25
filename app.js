@@ -19,7 +19,7 @@ app.use(methodOverride('_method'));
 app.use('/', drug_router);
 app.use('/druginformation', drug_info_router);
 app.use('/orders', order_router);
-app.use('vendors', vendor_router);
+app.use('/vendors', vendor_router);
 app.use('/vendordrugs', vendor_drug_router);
 app.use('/locations', locations_router);
 app.use('/shelves', shelves_router);
