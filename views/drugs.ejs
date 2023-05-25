@@ -62,12 +62,12 @@
                         <tbody>
                             <% drug_data.forEach(function(drug) {%>
                                 <tr>
+                                    <td><%= drug.drugID %></td>
                                     <td>
                                         <a href="/druginformation/<%= encodeURIComponent(drug.drugName) %>">
-                                            <%= drug.drugID %>
+                                            <%= drug.drugName %>
                                         </a>
                                     </td>
-                                    <td><%= drug.drugName %></td>
                                     <td><%= drug.drugPropName %></td>
                                     <td><%= drug.drugStrength %></td>
                                     <td><%= drug.drugForm %></td>
