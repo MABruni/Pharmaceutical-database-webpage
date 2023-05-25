@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    
+    <div class="container is-flex is-justify-content-center">
+        <nav class="navbar" role="navigation">
+            <section class="navbar-start">
+                <a class="navbar-item" href="/">Dashboard</a>
+                <a class="navbar-item" href="/orders">Orders</a>
+                <a class="navbar-item" href="/vendors">Vendor</a>
+                <a class="navbar-item" href="/vendordrugs">Vendor Drugs</a>
+                <a class="navbar-item" href="/locations">Locations</a>
+                <a class="navbar-item" href="/shelves">Shelves Information</a>
+                <!-- DrugInformation joins DrugLocations, DrugIngredients and VendorDrugs -->
+                <a class="navbar-item" href="/druginformation">Drug Information</a>
+                <a class="navbar-item" href="/ingredients">Declared Ingredients</a>
+            </section>
+        </nav>
+    </div>
+
+    <title>Vendor Drugs</title>
+</head>
+
+<body>
+    <article class="container is-fluid">
+        <div class="table-container">
+            <div class="block column">
+                <div class="box">
+                    <div class="is-size-4 has-text-weight-bold mb-4">Search by vendor name</div>
+
+                    <div class="field">
+                        <div class="control">
+                            <input id="textinput-0" name="textinput-0" type="text" placeholder=""
+                                class="input ">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label" for="singlebutton-0"></label>
+                        <div class="control">
+                            <button id="singlebutton-0" name="singlebutton-0"
+                                class="button is-primary">Search</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <article class="container is-fluid">
+        <div class="has-text-centered is-size-1 has-text-weight-bold">ABC Pharma</div>
+        <div class="table-container">
+            <div class="block column">
+                <div class="box">
+                    <div class="has-text-centered is-size-3 has-text-weight-bold mb-4">General information</div>
+                    <table class="table is-bordered is-hoverable is-fullwidth">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Vendor Name</th>
+                                <th>Contact Person</th>
+                                <th>Phone Number</th>
+                                <th>Email</th>
+                                <th>Street</th>
+                                <th>City</th>
+                                <th>State</th>
+                                <th>Zip Code</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td align="right">1</td>
+                                <td>ABC Pharma</td>
+                                <td>John Smith</td>
+                                <td>555-1234</td>
+                                <td>jsmith@abcpharma.com</td>
+                                <td>123 Main St</td>
+                                <td>Austin</td>
+                                <td>Texas</td>
+                                <td>78701</td>
+                                <td><a href="#"><button class="button is-link">Edit</button></a></td>
+                                <td><a href="#"><button class="button is-danger">Delete</button></a></td>                     
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="block column">
+                <div class="box">
+                    <div class="has-text-centered is-size-3 has-text-weight-bold mb-4">Drugs sold</div>
+                    <table class="table is-bordered is-hoverable is-fullwidth">
+                        <thead>
+                            <tr>
+                                <th>Drug Name</th>
+                                <th>Unit Price ($)</th>
+                                <th>Discount Offered (%)</th>
+                                <th style="width: 10%"></th>
+                                <th style="width: 10%"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="is-vcentered">Acetaminophen</td>
+                                <td class="is-vcentered">0.02</td>
+                                <td class="is-vcentered">80</td>
+                                <td class="has-text-centered"><a href="#"><button class="button is-link">Edit</button></a></td>
+                                <td class="has-text-centered"><a href="#"><button class="button is-danger">Delete</button></a></td>                     
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="block column">
+                <div class="box">
+                    <div class="is-size-4 has-text-weight-bold mb-4">Assign new drug to vendor</div>
+
+                    <div class="field">
+                        <div class="control">
+                            <label class="label" for="textinput-0">Drug Name</label>
+                            <input id="textinput-0" name="textinput-0" type="text" placeholder=""
+                                class="input ">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <div class="control">
+                            <label class="label" for="textinput-0">Unit Price ($)</label>
+                            <input id="textinput-0" name="textinput-0" type="text" placeholder=""
+                                class="input ">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <div class="control">
+                            <label class="label" for="textinput-0">Discount Offered (%)</label>
+                            <input id="textinput-0" name="textinput-0" type="text" placeholder=""
+                                class="input ">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label" for="singlebutton-0"></label>
+                        <div class="control">
+                            <button id="singlebutton-0" name="singlebutton-0"
+                                class="button is-primary">Add</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <footer class="footer">
+        <div class="content has-text-centered">
+            <p>
+                Group 73 &copy; <strong>
+                    2023
+
+                </strong>
+            </p>
+        </div>
+    </footer>
+</body>

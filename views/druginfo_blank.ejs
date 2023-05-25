@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    
+    <div class="container is-flex is-justify-content-center">
+        <nav class="navbar" role="navigation">
+            <section class="navbar-start">
+                <a class="navbar-item" href="../">Dashboard</a>
+                <a class="navbar-item" href="./orders.html">Orders</a>
+                <a class="navbar-item" href="./vendors.html">Vendor</a>
+                <a class="navbar-item" href="./vendordrugs.html">Vendor Drugs</a>
+                <a class="navbar-item" href="./locations.html">Locations</a>
+                <a class="navbar-item" href="./shelves.html">Shelves Information</a>
+                <!-- DrugInformation joins DrugLocations, DrugIngredients and VendorDrugs -->
+                <a class="navbar-item" href="/druginformation">Drug Information</a>
+                <a class="navbar-item" href="./ingredients.html">Declared Ingredients</a>
+            </section>
+        </nav>
+    </div>
+
+    <title>Drug Information</title>
+</head>
+
+<body>
+    <article class="container is-fluid">
+        <div class="table-container">
+            <div class="block column">
+                <div class="box">
+                    <div class="is-size-4 has-text-weight-bold mb-4">Search by drug name</div>
+
+                    <form action="search_info" method="GET"></form>
+                        <div class="field">
+                            <div class="control">
+                                <input id="textinput-0" name="textinput-0" type="text" placeholder=""
+                                    class="input ">
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label" for="singlebutton-0"></label>
+                            <div class="control">
+                                <button id="singlebutton-0" name="singlebutton-0"
+                                    class="button is-primary" type="submit">Search</button>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <footer class="footer">
+        <div class="content has-text-centered">
+                Group 73 &copy; <strong>2023</strong>
+        </div>
+    </footer>   
+</body>
