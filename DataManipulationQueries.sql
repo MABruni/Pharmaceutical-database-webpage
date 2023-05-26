@@ -233,35 +233,38 @@ WHERE drugID = (
   SELECT DrugID FROM Drugs WHERE drugName = ?
 );
 
--- New queries
---
+---------------------------------
+-- New queries used for step 4 --
+---------------------------------
 
+-- Displays location information on drug information page using drug name to filter results.
 SELECT Locations.locationName, Locations.room, Shelves.shelfCode, Shelves.fridge, Shelves.freezer, DrugLocations.containerCode, DrugLocations.capacity, DrugLocations.availability
 FROM DrugLocations
 INNER JOIN Shelves ON Shelves.shelfID = DrugLocations.shelfID
 INNER JOIN Locations ON Shelves.locationID = Locations.locationID
 WHERE DrugLocations.drugID = (
-  SELECT drugID FROM Drugs WHERE drugName = :drugName
+  SELECT drugID FROM Drugs WHERE drugName = ?
 );
 
--- Added the where filter
+-- Query to return past orders for a drug using its name.
 SELECT OrderDetails.status, Drugs.drugName, Vendors.vendorName, Orders.OrderDate, OrderDetails.quantity, OrderDetails.expiryDate, OrderDetails.lotNumber, Orders.totalPrice
 FROM OrderDetails
 INNER JOIN Orders ON OrderDetails.orderID = Orders.orderID
 INNER JOIN Drugs ON OrderDetails.drugID = Drugs.drugID
 INNER JOIN Vendors ON OrderDetails.vendorID = Vendors.vendorID
 WHERE Drugs.drugID = (
-  SELECT DrugID FROM Drugs WHERE drugName = :drugName
+  SELECT DrugID FROM Drugs WHERE drugName = ?
 );
 
--- New one
+-- Query showing the vendors that sell one drug, filtered by name.
 SELECT Vendors.vendorName, Vendors.contactPerson, Vendors.phoneNumber, Vendors.street, Vendors.city, Vendors.state, Vendors.zipCode, VendorDrugs.unitPrice, VendorDrugs.discountOffered
 FROM VendorDrugs
 INNER JOIN Vendors ON Vendors.vendorID = VendorDrugs.vendorID
 WHERE VendorDrugs.drugID = (
-  SELECT DrugID FROM Drugs WHERE drugName = :drugName
+  SELECT DrugID FROM Drugs WHERE drugName = ?
 );
 
+-- Returns all ingredients associated with a drug name.
 SELECT IngredientName 
 FROM Ingredients
 INNER JOIN DrugIngredients ON Ingredients.ingredientID = DrugIngredients.ingredientID
@@ -269,6 +272,7 @@ WHERE DrugIngredients.drugID = (
   SELECT drugID FROM Drugs WHERE drugName = ?
 );
 
+-- Deletes a location associated with a drug.
 DELETE FROM DrugLocations
   WHERE drugID = (
     SELECT drugID FROM Drugs WHERE drugName = ?
@@ -278,11 +282,14 @@ DELETE FROM DrugLocations
   )
   AND containerCode = ?;
 
+-- Get location ID based on location name and room.
 SELECT locationID
 FROM Locations
 WHERE locationName = ?
 AND room = ?;
 
+-- Gets shelfID based on location ID (obtained with the previous query) and the rest
+-- of the fields in our webpage table.
 SELECT shelfID
 FROM Shelves
 INNER JOIN Locations ON Shelves.locationID = (
@@ -294,9 +301,11 @@ WHERE Shelves.shelfCode = ?
 AND Shelves.fridge = ?
 AND Shelves.freezer = ?;
 
+-- Gets drugID from drug name.
 SELECT drugID FROM Drugs
 WHERE drugName = ?;
 
+-- Inserts new values in our webpage locations table.
 INSERT INTO DrugLocations (shelfID, drugID)
 VALUES (shelfID, drugID)
 WHERE shelfID = (
@@ -306,8 +315,13 @@ WHERE shelfID = (
   )
 );
 
-INSERT INTO Shelves (shelfCode, fridge, freezer)
-VALUES (?, ?, ?);
+-- Inserts new relationship between a drug and an ingredient.
+INSERT INTO DrugIngredients (drugID, ingredientID)
+  VALUES (
+    (SELECT drugID FROM Drugs WHERE drugName = ?),
+    (SELECT ingredientID FROM Ingredients WHERE ingredientName = ?)
+  );
 
-INSERT INTO DrugLocations (containerCode, capacity, availability)
-VALUES (?, ?, ?);
+-- Inserts new relationship between a location and a drug.
+INSERT INTO DrugLocations (drugID, shelfID, containerCode, capacity, availability)
+  VALUES (?, ?, ?, ?, ?);

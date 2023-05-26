@@ -70,10 +70,16 @@ router.get('/:drugName', async function(req,res) {
         freezer: Boolean(location.freezer.readUInt8())
       }));
 
+      const formatted_orders = orders.map(order => ({
+        ...order,
+        orderDate: order.orderDate.toISOString().split('T')[0],
+        expiryDate:  order.expiryDate.toISOString().split('T')[0],
+      }));
+
       return {
         locations: formatted_location,
         ingredients: ingredients,
-        orders: orders,
+        orders: formatted_orders,
         vendors:vendors,
       };
     } catch(error) {
@@ -117,13 +123,13 @@ router.post('/addlocation', async function(req,res) {
   WHERE Shelves.shelfCode = ?
   AND Shelves.fridge = ?
   AND Shelves.freezer = ?;
-  `
+  `;
   const query2 = `SELECT drugID FROM Drugs
   WHERE drugName = ?;
-  `
+  `;
   const insert_query = `INSERT INTO DrugLocations (drugID, shelfID, containerCode, capacity, availability)
   VALUES (?, ?, ?, ?, ?);
-  ` 
+  `;
 
   async function fetch_shelfID() {
     return new Promise((resolve, reject) => {

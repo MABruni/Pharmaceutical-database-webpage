@@ -27,7 +27,7 @@ async function get_data_sql(req, res) {
       ...drug,
       storeFridge: Boolean(drug.storeFridge.readUInt8()),
       storeFreezer: Boolean(drug.storeFreezer.readUInt8()),
-      earlyExpiration:drug.earlyExpiration.toISOString().split('T')[0]
+      earlyExpiration: drug.earlyExpiration.toISOString().split('T')[0]
     }));
     return formatted_data
   } catch (error) {
