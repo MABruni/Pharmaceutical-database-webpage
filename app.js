@@ -17,6 +17,7 @@ app.use(methodOverride('_method'));
 
 
 app.use('/', drug_router);
+app.use('/editdrug', drug_router);
 app.use('/druginformation', drug_info_router);
 app.use('/orders', order_router);
 app.use('/vendors', vendor_router);
