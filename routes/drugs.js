@@ -47,17 +47,9 @@ router.get('/editdrug', async function(req, res) {
   res.render('drugedit.ejs', {drug_data: formatted_data})
 })
 
-// router.post('/', validateInput, insertData, handleErrors, redirectToHome);
+router.put('/drugchanges', get_data_web, insert_data, redirect);
 
-function validateInput(req, res, next) {
-  const { drugName, drugStrength, drugForm, drugATC, drugNDC, storeFridge, storeFreezer, totalQuantity, earlyExpiration } = req.body;
-
-  if (!drugName || !drugStrength || !drugForm || !drugATC || !drugNDC || !storeFridge || !storeFreezer || !totalQuantity || !earlyExpiration) {
-    return res.status(400).send('Missing required fields');
-  }
-
-  next();
-}
+router.post('/adddrug', validate_input, insert_data, redirect);
 
 function get_data_web(req, res, next) {
   const [drug_name, drug_propn, drug_strength, drug_form, drug_atc, drug_ndc, drug_fridge, drug_freezer, drug_quantity, drug_expiration]
@@ -79,6 +71,16 @@ function get_data_web(req, res, next) {
   next()
 };
 
+function validate_input(req, res, next) {
+  const { drugName, drugStrength, drugForm, drugATC, drugNDC, storeFridge, storeFreezer, totalQuantity, earlyExpiration } = req.body;
+
+  if (!drugName || !drugStrength || !drugForm || !drugATC || !drugNDC || !storeFridge || !storeFreezer || !totalQuantity || !earlyExpiration) {
+    return res.status(400).send('Missing required fields');
+  }
+
+  next();
+}
+
 function insert_data(req, res, next) {
   const { drugName, drugPropName, drugStrength, drugForm, drugATC, drugNDC, storeFridge, storeFreezer, totalQuantity, earlyExpiration } = req.drugData;
   
@@ -93,8 +95,6 @@ function insert_data(req, res, next) {
 
   next()
 };
-
-router.put('/drugchanges', get_data_web, insert_data, redirect);
 
 function redirect(req, res) {
   res.redirect('/');
