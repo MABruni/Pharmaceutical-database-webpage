@@ -42,9 +42,10 @@ router.get('/', async function(req, res) {
   res.render('drugs.ejs', {drug_data: formatted_data});
 });
 
-router.get('/editdrug', async function(req, res) {
+router.get('/editdrug/:drugName', async function(req, res) {
   const formatted_data = await get_data_sql()
-  res.render('drugedit.ejs', {drug_data: formatted_data})
+  const { drugName } = req.params;
+  res.render('drugedit.ejs', {drug_data: formatted_data, name: drugName})
 })
 
 router.put('/drugchanges', get_data_web, insert_data, redirect);

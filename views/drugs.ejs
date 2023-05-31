@@ -77,12 +77,11 @@
                                     <td><%= drug.storeFreezer %></td>
                                     <td><%= drug.totalQuantity %></td>
                                     <td><%= drug.earlyExpiration %></td>
-                                    <td><a href="/editdrug"><button class="button is-link">Edit</button></a></td>                         
+                                    <td><a href="/editdrug/<%= drug.drugName %>"><button class="button is-link">Edit</button></a></td>                         
                                     <td><a href="#"><button class="button is-danger">Delete</button></a></td>                         
                                 </tr>
                             <% }) %>
                         </tbody>
-                        <tfoot></tfoot>
                     </table>
                 </div>
             </div>

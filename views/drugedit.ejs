@@ -61,58 +61,76 @@
                 
                         <tbody>
                             <% drug_data.forEach(function(drug) { %>
-                              <form action="./drugchanges?_method=PUT" method="POST">
-                                <tr>
-                                  <td>
-                                    <input type="hidden" name="ID" value="<%= drug.drugID %>">
-                                    <%= drug.drugID %>
-                                  </td>
-                                  <td>
-                                    <input type="hidden" name="name" value="<%= drug.drugName %>">
-                                    <%= drug.drugName %>
-                                  </td>
-                                  <td>
-                                    <input type="text" name="propName" value="<%= drug.drugPropName %>">
-                                    <%= drug.drugPropName %>
-                                  </td>
-                                  <td>
-                                    <input type="text" name="strength" value="<%= drug.drugStrength %>">
-                                    <%= drug.drugStrength %>
-                                  </td>
-                                  <td>
-                                    <input type="text" name="form" value="<%= drug.drugForm %>">
-                                    <%= drug.drugForm %>
-                                  </td>
-                                  <td>
-                                    <input type="text" name="atc" value="<%= drug.drugATC %>">
-                                    <%= drug.drugATC %>
-                                  </td>
-                                  <td>
-                                    <input type="text" name="ndc" value="<%= drug.drugNDC %>">
-                                    <%= drug.drugNDC %>
-                                  </td>
-                                  <td>
-                                    <input type="text" name="fridge" value="<%= drug.storeFridge %>">
-                                    <%= drug.storeFridge %>
-                                  </td>
-                                  <td>
-                                    <input type="text" name="freezer" value="<%= drug.storeFreezer %>">
-                                    <%= drug.storeFreezer %>
-                                  </td>
-                                  <td>
-                                    <input type="text" name="quantity" value="<%= drug.totalQuantity %>">
-                                    <%= drug.totalQuantity %>
-                                  </td>
-                                  <td>
-                                    <input type="text" name="expiration" value="<%= drug.earlyExpiration %>">
-                                    <%= drug.earlyExpiration %>
-                                  </td>
-                                  <td>
-                                    <button class="button is-link" type="submit">Edit</button>
-                                  </td>
-                                </tr>
-                              </form>
-                            <% }) %>
+                                <% if (drug.drugName === name) { %>
+                                    <form action="../drugchanges?_method=PUT" method="POST">
+                                        <tr>
+                                            <td>
+                                                <input type="hidden" name="ID" value="<%= drug.drugID %>">
+                                                <%= drug.drugID %>
+                                            </td>
+                                            <td>
+                                                <input type="text" name="name" value="<%= drug.drugName %>">
+                                                <%= drug.drugName %>
+                                            </td>
+                                            <td>
+                                                <input type="text" name="propName" value="<%= drug.drugPropName %>">
+                                                <%= drug.drugPropName %>
+                                            </td>
+                                            <td>
+                                                <input type="text" name="strength" value="<%= drug.drugStrength %>">
+                                                <%= drug.drugStrength %>
+                                            </td>
+                                            <td>
+                                                <input type="text" name="form" value="<%= drug.drugForm %>">
+                                                <%= drug.drugForm %>
+                                            </td>
+                                            <td>
+                                                <input type="text" name="atc" value="<%= drug.drugATC %>">
+                                                <%= drug.drugATC %>
+                                            </td>
+                                            <td>
+                                                <input type="text" name="ndc" value="<%= drug.drugNDC %>">
+                                                <%= drug.drugNDC %>
+                                            </td>
+                                            <td>
+                                                <input type="text" name="fridge" value="<%= drug.storeFridge %>">
+                                                <%= drug.storeFridge %>
+                                            </td>
+                                            <td>
+                                                <input type="text" name="freezer" value="<%= drug.storeFreezer %>">
+                                                <%= drug.storeFreezer %>
+                                            </td>
+                                            <td>
+                                                <input type="text" name="quantity" value="<%= drug.totalQuantity %>">
+                                                <%= drug.totalQuantity %>
+                                            </td>
+                                            <td>
+                                                <input type="text" name="expiration" value="<%= drug.earlyExpiration %>">
+                                                <%= drug.earlyExpiration %>
+                                            </td>
+                                            <td>
+                                                <button class="button is-primary" type="submit">Save</button>
+                                            </td>
+                                        </tr>
+                                    </form>
+                                <% } else { %>
+                                    <tr>
+                                        <td><%= drug.drugID %></td>
+                                        <td><%= drug.drugName %></td>
+                                        <td><%= drug.drugPropName %></td>
+                                        <td><%= drug.drugStrength %></td>
+                                        <td><%= drug.drugForm %></td>
+                                        <td><%= drug.drugATC %></td>
+                                        <td><%= drug.drugNDC %></td>
+                                        <td><%= drug.storeFridge %></td>
+                                        <td><%= drug.storeFreezer %></td>
+                                        <td><%= drug.totalQuantity %></td>
+                                        <td><%= drug.earlyExpiration %></td>
+                                        <td><a href="/editdrug/<%= drug.drugName %>"><button class="button is-link">Edit</button></a></td>                         
+                                        <td><a href="#"><button class="button is-danger">Delete</button></a></td>   
+                                    </tr>                      
+                                <% } %>
+                            <% }); %>
                           </tbody>
                           
                         <tfoot></tfoot>
