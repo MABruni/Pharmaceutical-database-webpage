@@ -29,6 +29,43 @@
 <body>
     <div class="has-text-centered is-size-2 has-text-weight-bold">Orders</div>
 
+    <% if (added_message.length > 0) { %>
+        <div id="added-notification" class="notification is-success has-text-centered">
+            <%= added_message[0] %>
+        </div>
+        <% added_message = [] %>
+    <% } %>
+
+    <% if (missing_message.length > 0) { %>
+        <div id="missing-notification" class="notification is-danger has-text-centered">
+            <%= missing_message[0] %>
+        </div>
+        <% missing_message = [] %>
+    <% } %>
+
+    <script>
+        const added_notification = document.getElementById('added-notification');
+        const missing_notification = document.getElementById('missing-notification');
+
+        function remove_notification(element) {
+        element.remove();
+        }
+
+        const notification_duration = 1500;
+
+        if (added_notification) {
+            setTimeout(() => {
+                remove_notification(added_notification);
+            }, notification_duration);
+        };
+
+        if (missing_notification) {
+            setTimeout(() => {
+                remove_notification(missing_notification);
+            }, notification_duration)
+        };
+    </script>
+
     <main>
         <article class="container is-fluid">
             <div class="block column">
@@ -39,6 +76,7 @@
                                 <tr>
                                     <th class="has-text-centered">Status</th>
                                     <th class="has-text-centered">Drug Name</th>
+                                    <th class="has-text-centered">NDC code</th>
                                     <th class="has-text-centered">Vendor Name</th>
                                     <th class="has-text-centered">Order Date</th>
                                     <th class="has-text-centered">Quantity</th>
@@ -52,6 +90,7 @@
                                     <tr>
                                         <td><%= order.status %></td>
                                         <td><%= order.drugName %></td>
+                                        <td><%= order.drugNDC %></td>
                                         <td><%= order.vendorName %></td>
                                         <td><%= order.orderDate %></td>
                                         <td><%= order.quantity %></td>
@@ -69,14 +108,14 @@
             <div class="columns">
                 <div class="block column">
                     <div class="box">
-                        <form action="">
+                        <form action="orders/addorder" method="POST">
                             <fieldset>
                                 <legend class="is-size-4 has-text-weight-bold mb-4">Add New Order</legend>
 
                                 <div class="field">
                                     <label class="label" for="textinput-0">Status</label>
                                     <div class="control">
-                                        <input id="textinput-0" name="textinput-0" type="text" placeholder=""
+                                        <input id="textinput-0" name="add_status" type="text" placeholder=""
                                             class="input ">
                                     </div>
                                 </div>
@@ -84,25 +123,33 @@
                                 <div class="field">
                                     <label class="label" for="textinput-0">Drug Name</label>
                                     <div class="control">
-                                        <input id="textinput-0" name="textinput-0" type="text" placeholder=""
+                                        <input id="textinput-0" name="add_dname" type="text" placeholder=""
+                                            class="input ">
+                                    </div>
+                                </div>
+
+                                <div class="field">
+                                    <label class="label" for="textinput-0">Drug NDC</label>
+                                    <div class="control">
+                                        <input id="textinput-0" name="add_ndc" type="text" placeholder=""
                                             class="input ">
                                     </div>
                                 </div>
 
                                 <div class="field columns">
                                     <div class="column">
-                                        <label class="label" for="name">Vendor Name</label>
+                                        <label class="label" for="textinput-0">Vendor Name</label>
                                         <div class="control">
-                                            <input class="input" type="text" id="drugStrength" name="drug_strength" />
+                                            <input class="input" name="add_vname" type="text" id="drugStrength"  />
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="field columns">
                                     <div class="column">
-                                        <label class="label" for="name">Order Date</label>
+                                        <label class="label" for="textinput-0">Order Date</label>
                                         <div class="control">
-                                            <input class="input" type="text" id="drugStrength" name="drug_strength" />
+                                            <input class="input" name="add_date" type="text" id="drugStrength"  />
                                         </div>
                                     </div>
                                 </div>
@@ -110,7 +157,7 @@
                                 <div class="field">
                                     <label class="label" for="textinput-0">Quantity</label>
                                     <div class="control">
-                                        <input id="textinput-0" name="textinput-0" type="text" placeholder=""
+                                        <input id="textinput-0" name="add_quantity" type="text" placeholder=""
                                             class="input ">
                                     </div>
                                 </div>
@@ -118,7 +165,7 @@
                                 <div class="field">
                                     <label class="label" for="textinput-0">Expiry Date</label>
                                     <div class="control">
-                                        <input id="textinput-0" name="textinput-0" type="text" placeholder=""
+                                        <input id="textinput-0" name="add_expiration" type="text" placeholder=""
                                             class="input ">
                                     </div>
                                 </div>
@@ -126,7 +173,7 @@
                                 <div class="field">
                                     <label class="label" for="textinput-0">Lot Number</label>
                                     <div class="control">
-                                        <input id="textinput-0" name="textinput-0" type="text" placeholder=""
+                                        <input id="textinput-0" name="add_lotn" type="text" placeholder=""
                                             class="input ">
                                     </div>
                                 </div>
@@ -134,17 +181,16 @@
                                 <div class="field">
                                     <label class="label" for="textinput-0">Total Price</label>
                                     <div class="control">
-                                        <input id="textinput-0" name="textinput-0" type="text" inputmode="numeric"
+                                        <input id="textinput-0" name="add_price" type="text" inputmode="numeric"
                                             placeholder="" class="input ">
                                     </div>
                                 </div>
 
-                                <!-- Button -->
                                 <div class="field">
                                     <label class="label" for="singlebutton-0"></label>
                                     <div class="control">
                                         <button id="singlebutton-0" name="singlebutton-0"
-                                            class="button is-primary">Add</button>
+                                            class="button is-primary" type="submit">Add</button>
                                     </div>
                                 </div>
                             </fieldset>
@@ -171,6 +217,14 @@
                                     <label class="label" for="textinput-0">Drug Name</label>
                                     <div class="control">
                                         <input id="textinput-0" name="textinput-0" type="text" placeholder=""
+                                            class="input ">
+                                    </div>
+                                </div>
+
+                                <div class="field">
+                                    <label class="label" for="textinput-0">Drug NDC</label>
+                                    <div class="control">
+                                        <input id="textinput-0" name="add_ndc" type="text" placeholder=""
                                             class="input ">
                                     </div>
                                 </div>
