@@ -325,3 +325,6 @@ INSERT INTO DrugIngredients (drugID, ingredientID)
 -- Inserts new relationship between a location and a drug.
 INSERT INTO DrugLocations (drugID, shelfID, containerCode, capacity, availability)
   VALUES (?, ?, ?, ?, ?);
+
+DELETE FROM Drugs
+WHERE drugID = ?;

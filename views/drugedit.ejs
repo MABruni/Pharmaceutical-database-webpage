@@ -61,7 +61,7 @@
                 
                         <tbody>
                             <% drug_data.forEach(function(drug) { %>
-                                <% if (drug.drugName === name) { %>
+                                <% if (drug.drugID == ID) { %>
                                     <form action="../drugchanges?_method=PUT" method="POST">
                                         <tr>
                                             <td>
@@ -126,14 +126,16 @@
                                         <td><%= drug.storeFreezer %></td>
                                         <td><%= drug.totalQuantity %></td>
                                         <td><%= drug.earlyExpiration %></td>
-                                        <td><a href="/editdrug/<%= drug.drugName %>"><button class="button is-link">Edit</button></a></td>                         
-                                        <td><a href="#"><button class="button is-danger">Delete</button></a></td>   
-                                    </tr>                      
+                                        <td><a href="/editdrug/<%= drug.drugID %>"><button class="button is-link">Edit</button></a></td>                         
+                                        <td>
+                                            <form method="POST" action="/deletedrug/<%= drug.drugID %>?_method=DELETE">
+                                                <button class="button is-danger">Delete</button>                    
+                                            </form>
+                                        </td>     
+                                    </tr>
                                 <% } %>
-                            <% }); %>
-                          </tbody>
-                          
-                        <tfoot></tfoot>
+                            <% }) %>
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -142,22 +144,21 @@
                 <div class="block column">
                     <div class="box">
 
-                        <form action="">
+                        <form action="/adddrug" method="POST">
                             <fieldset>
                                 <legend class="is-size-4 has-text-weight-bold mb-4">Add New Drug To Inventory</legend>
 
                                 <div class="field">
                                     <label class="label" for="textinput-0">Drug Name</label>
                                     <div class="control">
-                                        <input id="textinput-0" name="textinput-0" type="text" placeholder=""
-                                            class="input ">
+                                        <input id="Name" name="add_name" type="text" placeholder="" class="input">
                                     </div>
                                 </div>
 
                                 <div class="field">
                                     <label class="label" for="textinput-0">Proprietary Drug Name</label>
                                     <div class="control">
-                                        <input id="textinput-0" name="textinput-0" type="text" placeholder=""
+                                        <input id="PropName" name="add_propn" type="text" placeholder=""
                                             class="input ">
                                     </div>
                                 </div>
@@ -166,7 +167,7 @@
                                     <div class="column">
                                         <label class="label" for="name">Strength</label>
                                         <div class="control">
-                                            <input class="input" type="text" id="drugStrength" name="drug_strength" />
+                                            <input class="input" type="text" id="Strength" name="add_strength" />
                                         </div>
                                     </div>
                                 </div>
@@ -174,7 +175,7 @@
                                 <div class="field">
                                     <label class="label" for="name">Form</label>
                                     <div class="select">
-                                        <select name="" id="">
+                                        <select name="add_form" id="">
                                             <option value="" selected hidden>Select an option</option>
                                             <option value="Tablet">Tablet</option>
                                             <option value="Tablet ER">Tablet ER</option>
@@ -188,14 +189,14 @@
                                 <div class="field">
                                     <label class="label" for="textinput-0">ATC</label>
                                     <div class="control">
-                                        <input id="textinput-0" name="textinput-0" type="text" placeholder=""
+                                        <input id="textinput-0" name="add_atc" type="text" placeholder=""
                                             class="input ">
                                     </div>
                                 </div>
                                 <div class="field">
                                     <label class="label" for="textinput-0">NDC</label>
                                     <div class="control">
-                                        <input id="textinput-0" name="textinput-0" type="text" placeholder=""
+                                        <input id="textinput-0" name="add_ndc" type="text" placeholder=""
                                             class="input ">
                                     </div>
                                 </div>
@@ -203,10 +204,10 @@
                                 <div class="field">
                                     <label class="label" for="textinput-0">Fridge</label>
                                     <div class="select">
-                                        <select name="Fridge" id="">
+                                        <select name="add_fridge" id="">
                                             <option value="" selected hidden>Select an option</option>
-                                            <option value="Yes">Yes</option>
-                                            <option value="No">No</option>
+                                            <option value="true">Yes</option>
+                                            <option value="false">No</option>
                                         </select>
                                     </div>
                                 </div>
@@ -214,10 +215,10 @@
                                 <div class="field">
                                     <label class="label" for="textinput-0">Freezer</label>
                                     <div class="select">
-                                        <select name="Fridge" id="">
+                                        <select name="add_freezer" id="">
                                             <option value="" selected hidden>Select an option</option>
-                                            <option value="Yes">Yes</option>
-                                            <option value="No">No</option>
+                                            <option value="true">Yes</option>
+                                            <option value="false">No</option>
                                         </select>
                                     </div>
                                 </div>
@@ -225,24 +226,23 @@
                                 <div class="field">
                                     <label class="label" for="textinput-0">Total Quantity</label>
                                     <div class="control">
-                                        <input id="textinput-0" name="textinput-0" type="text" inputmode="numeric"
+                                        <input id="textinput-0" name="add_quantity" type="text" inputmode="numeric"
                                             placeholder="" class="input ">
                                     </div>
                                 </div>
                                 <div class="field">
                                     <label class="label" for="textinput-0">Earliest Expiration Date</label>
                                     <div class="control">
-                                        <input id="textinput-0" name="textinput-0" type="date" placeholder=""
+                                        <input id="textinput-0" name="add_expiration" type="date" placeholder=""
                                             class="input ">
                                     </div>
                                 </div>
 
-                                <!-- Button -->
                                 <div class="field">
                                     <label class="label" for="singlebutton-0"></label>
                                     <div class="control">
                                         <button id="singlebutton-0" name="singlebutton-0"
-                                            class="button is-primary">Add</button>
+                                            class="button is-primary" type="submit">Add</button>
                                     </div>
                                 </div>
                             </fieldset>
@@ -260,7 +260,7 @@
                                 <div class="field">
                                     <label class="label" for="textinput-0">Drug Name</label>
                                     <div class="control">
-                                        <input id="textinput-0" name="textinput-0" type="text" placeholder=""
+                                        <input id="textinput-0" name="search_name" type="text" placeholder=""
                                             class="input ">
                                     </div>
                                 </div>
@@ -268,7 +268,7 @@
                                 <div class="field">
                                     <label class="label" for="textinput-0">Proprietary Drug Name</label>
                                     <div class="control">
-                                        <input id="textinput-0" name="textinput-0" type="text" placeholder=""
+                                        <input id="textinput-0" name="search_propn" type="text" placeholder=""
                                             class="input ">
                                     </div>
                                 </div>
@@ -277,7 +277,7 @@
                                     <div class="column">
                                         <label class="label" for="name">Strength</label>
                                         <div class="control">
-                                            <input class="input" type="text" id="drugStrength" name="drug_strength" />
+                                            <input class="input" type="text" id="drugStrength" name="search_strength" />
                                         </div>
                                     </div>
                                 </div>
@@ -285,7 +285,7 @@
                                 <div class="field">
                                     <label class="label" for="name">Form</label>
                                     <div class="select">
-                                        <select name="" id="">
+                                        <select name="search_form" id="">
                                             <option value="" selected hidden>Select an option</option>
                                             <option value="Tablet">Tablet</option>
                                             <option value="Tablet ER">Tablet ER</option>
@@ -299,14 +299,14 @@
                                 <div class="field">
                                     <label class="label" for="textinput-0">ATC</label>
                                     <div class="control">
-                                        <input id="textinput-0" name="textinput-0" type="text" placeholder=""
+                                        <input id="textinput-0" name="search_atc" type="text" placeholder=""
                                             class="input ">
                                     </div>
                                 </div>
                                 <div class="field">
                                     <label class="label" for="textinput-0">NDC</label>
                                     <div class="control">
-                                        <input id="textinput-0" name="textinput-0" type="text" placeholder=""
+                                        <input id="textinput-0" name="search_ndc" type="text" placeholder=""
                                             class="input ">
                                     </div>
                                 </div>
@@ -314,7 +314,7 @@
                                 <div class="field">
                                     <label class="label" for="textinput-0">Fridge</label>
                                     <div class="select">
-                                        <select name="Fridge" id="">
+                                        <select name="search_fridge" id="">
                                             <option value="" selected hidden>Select an option</option>
                                             <option value="Yes">Yes</option>
                                             <option value="No">No</option>
@@ -325,7 +325,7 @@
                                 <div class="field">
                                     <label class="label" for="textinput-0">Freezer</label>
                                     <div class="select">
-                                        <select name="Fridge" id="">
+                                        <select name="search_freezer" id="">
                                             <option value="" selected hidden>Select an option</option>
                                             <option value="Yes">Yes</option>
                                             <option value="No">No</option>
@@ -336,24 +336,23 @@
                                 <div class="field">
                                     <label class="label" for="textinput-0">Total Quantity</label>
                                     <div class="control">
-                                        <input id="textinput-0" name="textinput-0" type="text" inputmode="numeric"
+                                        <input id="textinput-0" name="search_quantity" type="text" inputmode="numeric"
                                             placeholder="" class="input ">
                                     </div>
                                 </div>
                                 <div class="field">
                                     <label class="label" for="textinput-0">Earliest Expiration Date</label>
                                     <div class="control">
-                                        <input id="textinput-0" name="textinput-0" type="date" placeholder=""
+                                        <input id="textinput-0" name="search_expiration" type="date" placeholder=""
                                             class="input ">
                                     </div>
                                 </div>
 
-                                <!-- Button -->
                                 <div class="field">
                                     <label class="label" for="singlebutton-0"></label>
                                     <div class="control">
                                         <button id="singlebutton-0" name="singlebutton-0"
-                                            class="button is-primary">Search</button>
+                                            class="button is-primary" type="submit">Search</button>
                                     </div>
                                 </div>
                             </fieldset>
