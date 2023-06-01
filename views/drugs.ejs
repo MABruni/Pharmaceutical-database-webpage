@@ -155,24 +155,24 @@
                         <tbody>
                             <% drug_data.forEach(function(drug) {%>
                                 <tr>
-                                    <td><%= drug.drugID %></td>
+                                    <td class="is-vcentered"><%= drug.drugID %></td>
                                     <td>
                                         <a href="/druginformation/<%= encodeURIComponent(drug.drugName) %>">
                                             <%= drug.drugName %>
                                         </a>
                                     </td>
-                                    <td><%= drug.drugPropName %></td>
-                                    <td><%= drug.drugStrength %></td>
-                                    <td><%= drug.drugForm %></td>
-                                    <td><%= drug.drugATC %></td>
-                                    <td><%= drug.drugNDC %></td>
-                                    <td><%= drug.storeFridge %></td>
-                                    <td><%= drug.storeFreezer %></td>
-                                    <td><%= drug.totalQuantity %></td>
-                                    <td><%= drug.earlyExpiration %></td>
-                                    <td><a href="/editdrug/<%= drug.drugID %>"><button class="button is-link">Edit</button></a></td>                         
-                                    <td>
-                                        <form id="delete_form" method="POST" action="/deletedrug/<%= drug.drugID %>?_method=DELETE">
+                                    <td class="is-vcentered"><%= drug.drugPropName %></td>
+                                    <td class="is-vcentered"><%= drug.drugStrength %></td>
+                                    <td class="is-vcentered"><%= drug.drugForm %></td>
+                                    <td class="is-vcentered"><%= drug.drugATC %></td>
+                                    <td class="is-vcentered"><%= drug.drugNDC %></td>
+                                    <td class="is-vcentered"><%= drug.storeFridge %></td>
+                                    <td class="is-vcentered"><%= drug.storeFreezer %></td>
+                                    <td class="is-vcentered"><%= drug.totalQuantity %></td>
+                                    <td class="is-vcentered"><%= drug.earlyExpiration %></td>
+                                    <td class="is-vcentered"><a href="/editdrug/<%= drug.drugID %>"><button class="button is-link">Edit</button></a></td>                         
+                                    <td class="is-vcentered">
+                                        <form id="delete_form_<%= drug.drugID %>" method="POST" action="/deletedrug/<%= drug.drugID %>?_method=DELETE">
                                             <button class="button is-danger" onclick="confirmation_timing(<%= drug.drugID %>, event)">Delete</button>                    
                                         </form>
                                     </td>   
@@ -231,7 +231,7 @@
                 };
 
                 async function delete_drug(drugID) {
-                    document.getElementById('delete_form' + drugID).submit()
+                    document.getElementById('delete_form_' + drugID).submit()
                 };
             </script>
 

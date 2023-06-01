@@ -5,7 +5,6 @@ const ejs = require('ejs');
 PORT = 3000;
 
 
-
 router.get('/', async function(req, res) {
   const formatted_data = await get_data_sql()
   const success_message = req.flash('success');
