@@ -25,7 +25,8 @@ async function get_data_sql(req, res) {
   FROM OrderDetails
   INNER JOIN Orders ON OrderDetails.orderID = Orders.orderID
   INNER JOIN Drugs ON OrderDetails.drugID = Drugs.drugID
-  INNER JOIN Vendors ON OrderDetails.vendorID = Vendors.vendorID;`;
+  INNER JOIN Vendors ON OrderDetails.vendorID = Vendors.vendorID
+  ORDER BY OrderDetails.orderDetailsID;`;
 
   async function fetch_order_list() {
     return new Promise((resolve, reject) => {

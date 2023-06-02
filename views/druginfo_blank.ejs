@@ -10,15 +10,15 @@
     <div class="container is-flex is-justify-content-center">
         <nav class="navbar" role="navigation">
             <section class="navbar-start">
-                <a class="navbar-item" href="../">Dashboard</a>
-                <a class="navbar-item" href="./orders.html">Orders</a>
-                <a class="navbar-item" href="./vendors.html">Vendor</a>
-                <a class="navbar-item" href="./vendordrugs.html">Vendor Drugs</a>
-                <a class="navbar-item" href="./locations.html">Locations</a>
-                <a class="navbar-item" href="./shelves.html">Shelves Information</a>
+                <a class="navbar-item" href="/">Dashboard</a>
+                <a class="navbar-item" href="/orders">Orders</a>
+                <a class="navbar-item" href="/vendors">Vendor</a>
+                <a class="navbar-item" href="/vendordrugs">Vendor Drugs</a>
+                <a class="navbar-item" href="/locations">Locations</a>
+                <a class="navbar-item" href="/shelves">Shelves Information</a>
                 <!-- DrugInformation joins DrugLocations, DrugIngredients and VendorDrugs -->
                 <a class="navbar-item" href="/druginformation">Drug Information</a>
-                <a class="navbar-item" href="./ingredients.html">Declared Ingredients</a>
+                <a class="navbar-item" href="/ingredients">Declared Ingredients</a>
             </section>
         </nav>
     </div>
@@ -28,15 +28,26 @@
 
 <body>
     <article class="container is-fluid">
+        <header>
+            <h1 class="has-text-centered is-size-2 has-text-weight-bold mb-4">Drug Information</h1>
+        </header>
+
+        <% if (not_found_message.length > 0) { %>
+            <div id="added-notification" class="notification is-danger has-text-centered">
+                <%= not_found_message[0] %>
+            </div>
+            <% not_found_message = [] %>
+        <% } %>
+
         <div class="table-container">
             <div class="block column">
                 <div class="box">
                     <div class="is-size-4 has-text-weight-bold mb-4">Search by drug name</div>
 
-                    <form action="search_info" method="GET"></form>
+                    <form action="/druginformation/searchinfo" method="POST">
                         <div class="field">
                             <div class="control">
-                                <input id="textinput-0" name="textinput-0" type="text" placeholder=""
+                                <input id="textinput-0" name="drug_name" type="text" placeholder=""
                                     class="input ">
                             </div>
                         </div>

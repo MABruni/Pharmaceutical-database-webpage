@@ -173,7 +173,7 @@
                                     <td class="is-vcentered"><a href="/editdrug/<%= drug.drugID %>"><button class="button is-link">Edit</button></a></td>                         
                                     <td class="is-vcentered">
                                         <form id="delete_form_<%= drug.drugID %>" method="POST" action="/deletedrug/<%= drug.drugID %>?_method=DELETE">
-                                            <button class="button is-danger" onclick="confirmation_timing(<%= drug.drugID %>, event)">Delete</button>                    
+                                            <button class="button is-danger delete-button" data-drug-id="<%= drug.drugID %>">Delete</button>                    
                                         </form>
                                     </td>   
                                     <div id="confirmation_prompt" class="modal is-overlay">
@@ -200,13 +200,23 @@
             </div>
 
             <script>
-                async function confirmation_timing(drugID, event) {
+                document.addEventListener('click', function(event) {
+                if (event.target.classList.contains('delete-button')) {
                     event.preventDefault();
-                    const confirmation = await show_confirmation_prompt()
-                    if (confirmation) {
-                        await delete_drug(drugID)
-                    }
-                };
+                    const deleteButton = event.target;
+                    const drugID = deleteButton.getAttribute('data-drug-id');
+                    confirmation_timing(drugID);
+                }
+                });
+
+                async function confirmation_timing(drugID) {
+                    show_confirmation_prompt()
+                        .then(confirmation => {
+                        if (confirmation) {
+                            delete_drug(drugID);
+                        }
+                    });
+                }
 
                 async function show_confirmation_prompt() {
                     return new Promise((resolve) => {

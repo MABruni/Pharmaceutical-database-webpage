@@ -59,8 +59,8 @@ async function get_data_sql(req, res) {
     const drug_data = await fetch_drug_list();
     const formatted_data = drug_data.map(drug => ({
       ...drug,
-      storeFridge: Boolean(drug.storeFridge.readUInt8()),
-      storeFreezer: Boolean(drug.storeFreezer.readUInt8()),
+      storeFridge: drug.storeFridge.readUInt8() === 1 ? 'true' : 'false',
+      storeFreezer: drug.storeFreezer.readUInt8() === 1 ? 'true' : 'false',
       earlyExpiration: drug.earlyExpiration.toISOString().split('T')[0]
     }));
     return formatted_data
@@ -229,10 +229,10 @@ async function check_changes(req,res,next) {
   const formatted_data = sql_data.map(drug => ({
     ...drug,
     storeFridge: drug.storeFridge === 'true' ? 1 : 0,
-    storeFreezer: drug.storeFridge === 'true' ? 1 : 0,
+    storeFreezer: drug.storeFreezer === 'true' ? 1 : 0,
   }));
 
-  const drug_editted = formatted_data.find(drug => drug.drugName === drugName);
+  const drug_editted = formatted_data.find(drug => drug.drugName === drugName);  
 
   const is_modified =
     drugName !== drug_editted.drugName ||

@@ -5,10 +5,12 @@ const ejs = require('ejs');
 PORT = 3000;
 
 router.get('/', function(req, res) {
-  res.render('druginfo_blank.ejs')
+  const not_found_message = req.flash('not_found');
+  res.render('druginfo_blank.ejs', { not_found_message: not_found_message })
 });
 
 router.get('/:drugName', async function(req,res) {
+  const not_found_message = req.flash('not_found');
   const drug_name = req.params.drugName;
 
   const location_query = `SELECT Locations.locationName, Locations.room, Shelves.shelfCode, Shelves.fridge, Shelves.freezer, DrugLocations.containerCode, DrugLocations.capacity, DrugLocations.availability
@@ -92,12 +94,35 @@ router.get('/:drugName', async function(req,res) {
 
     res.render('druginfo.ejs', {
       drug_name: drug_name,
-      info_data: info_data
+      info_data: info_data,
+      not_found_message: not_found_message
     })
   } catch (error) {
     console.error(error);
     res.status(500).send('Internal Server Error');
   };
+});
+
+router.post('/searchinfo', async function(req, res) {
+  const search_term = req.body.drug_name
+  if (search_term === '') {
+    res.redirect('/druginformation')
+  } else {
+    db.pool.query(`SELECT drugName FROM Drugs WHERE drugName LIKE CONCAT('%', ?, '%')`, [search_term], (error, result) => {
+      if (error) {
+        redirect(req, res) 
+      } else {
+        if (result.length >0) {
+          const drugName = result[0].drugName
+          const redirectURL = `/druginformation/${drugName}`
+          res.redirect(redirectURL)
+        } else {
+          req.flash('not_found', 'No matching drugs found')
+          res.redirect('/druginformation')
+        }
+      }
+    })
+  }
 });
 
 router.post('/addlocation', async function(req,res) {
