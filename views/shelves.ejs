@@ -12,7 +12,7 @@
             <section class="navbar-start">
                 <a class="navbar-item" href="/">Dashboard</a>
                 <a class="navbar-item" href="/orders">Orders</a>
-                <a class="navbar-item" href="/vendors">Vendor</a>
+                <a class="navbar-item" href="/vendors">Vendors</a>
                 <a class="navbar-item" href="/vendordrugs">Vendor Drugs</a>
                 <a class="navbar-item" href="/locations">Locations</a>
                 <a class="navbar-item" href="/shelves">Shelves Information</a>
@@ -335,14 +335,14 @@
 
             <div class="block column">
                 <div class="box">
-                    <form action="">
+                    <form action="/shelves/searchshelf" method="POST">
                         <fieldset>
                             <legend class="is-size-4 has-text-weight-bold mb-5">Search Shelves</legend>
 
                             <div class="field">
                                 <label class="label" for="textinput-0">Shelf code</label>
                                 <div class="control">
-                                    <input id="textinput-0" name="textinput-0" type="text" placeholder="" 
+                                    <input id="textinput-0" name="search_code" type="text" placeholder="" 
                                         class="input">
                                 </div>
                             </div>
@@ -350,10 +350,10 @@
                             <div class="field">
                                 <label class="label" for="textinput-0">Fridge</label>
                                 <div class="select">
-                                    <select name="Fridge" id="">
+                                    <select name="search_fridge" id="">
                                         <option value="" selected hidden>Select an option</option>
-                                        <option value="Yes">Yes</option>
-                                        <option value="No">No</option>
+                                        <option value="1">Yes</option>
+                                        <option value="0">No</option>
                                     </select>
                                 </div>
                             </div>
@@ -361,10 +361,10 @@
                             <div class="field">
                                 <label class="label" for="textinput-0">Freezer</label>
                                 <div class="select">
-                                    <select name="Fridge" id="">
+                                    <select name="search_freezer" id="">
                                         <option value="" selected hidden>Select an option</option>
-                                        <option value="Yes">Yes</option>
-                                        <option value="No">No</option>
+                                        <option value="1">Yes</option>
+                                        <option value="0">No</option>
                                     </select>
                                 </div>
                             </div>
@@ -372,7 +372,7 @@
                             <div class="field">
                                 <label class="label" for="textinput-0">Location Name</label>
                                 <div class="control">
-                                    <input id="textinput-0" name="textinput-0" type="text" placeholder="" 
+                                    <input id="textinput-0" name="search_location" type="text" placeholder="" 
                                         class="input">
                                 </div>
                             </div>
@@ -380,7 +380,7 @@
                             <div class="field">
                                 <label class="label" for="textinput-0">Room</label>
                                 <div class="control">
-                                    <input id="textinput-0" name="textinput-0" type="text" placeholder="" 
+                                    <input id="textinput-0" name="search_room" type="text" placeholder="" 
                                         class="input">
                                 </div>
                             </div>
@@ -388,7 +388,7 @@
                             <div class="field">
                                 <label class="label" for="textinput-0">Container code</label>
                                 <div class="control">
-                                    <input id="textinput-0" name="textinput-0" type="text" placeholder="" 
+                                    <input id="textinput-0" name="search_container" type="text" placeholder="" 
                                         class="input">
                                 </div>
                             </div>
@@ -396,7 +396,7 @@
                             <div class="field">
                                 <label class="label" for="textinput-0">Drug name</label>
                                 <div class="control">
-                                    <input id="textinput-0" name="textinput-0" type="text" placeholder="" 
+                                    <input id="textinput-0" name="search_drug" type="text" placeholder="" 
                                         class="input">
                                 </div>
                             </div>
@@ -404,7 +404,7 @@
                             <div class="field">
                                 <label class="label" for="textinput-0">Drug NDC</label>
                                 <div class="control">
-                                    <input id="textinput-0" name="textinput-0" type="text" placeholder="" 
+                                    <input id="textinput-0" name="search_ndc" type="text" placeholder="" 
                                         class="input">
                                 </div>
                             </div>
@@ -412,7 +412,7 @@
                             <div class="field">
                                 <label class="label" for="textinput-0">Capacity</label>
                                 <div class="control">
-                                    <input id="textinput-0" name="textinput-0" type="text" placeholder="" 
+                                    <input id="textinput-0" name="search_capacity" type="text" placeholder="" 
                                         class="input">
                                 </div>
                             </div>
@@ -420,7 +420,7 @@
                             <div class="field">
                                 <label class="label" for="textinput-0">Availability</label>
                                 <div class="control">
-                                    <input id="textinput-0" name="textinput-0" type="text" placeholder="" 
+                                    <input id="textinput-0" name="search_availability" type="text" placeholder="" 
                                         class="input">
                                 </div>
                             </div>

@@ -12,7 +12,7 @@
             <section class="navbar-start">
                 <a class="navbar-item" href="/">Dashboard</a>
                 <a class="navbar-item" href="/orders">Orders</a>
-                <a class="navbar-item" href="/vendors">Vendor</a>
+                <a class="navbar-item" href="/vendors">Vendors</a>
                 <a class="navbar-item" href="/vendordrugs">Vendor Drugs</a>
                 <a class="navbar-item" href="/locations">Locations</a>
                 <a class="navbar-item" href="/shelves">Shelves Information</a>
@@ -38,6 +38,114 @@
             </div>
             <% not_found_message = [] %>
         <% } %>
+
+        <% if (added_message.length > 0) { %>
+            <div id="added-notification" class="notification is-success has-text-centered">
+                <%= added_message[0] %>
+            </div>
+            <% added_message = [] %>
+        <% } %>
+
+        <% if (missing_message.length > 0) { %>
+            <div id="missing-notification" class="notification is-danger has-text-centered">
+                <%= missing_message[0] %>
+            </div>
+            <% missing_message = [] %>
+        <% } %>
+
+        <% if (success_message.length > 0) { %>
+            <div id="success-notification" class="notification is-success has-text-centered">
+                <%= success_message[0] %>
+            </div>
+            <% success_message = [] %>
+        <% } %>
+
+        <% if (no_changes_message.length > 0) { %>
+        <div id="no-changes-notification" class="notification is-warning has-text-centered">
+            <%= no_changes_message[0] %>
+        </div>
+            <% no_changes_message = [] %>
+        <% } %>
+
+        <% if (delete_error.length > 0) { %>
+            <div id="no-delete-notification" class="notification is-danger has-text-centered">
+                <%= delete_error[0] %>
+            </div>
+            <% delete_error = [] %>
+        <% } %>
+
+        <% if (delete_success.length > 0) { %>
+            <div id="delete-notification" class="notification is-success has-text-centered">
+                <%= delete_success[0] %>
+            </div>
+            <% delete_success = [] %>
+        <% } %>
+
+        <% if (ingredient_success.length > 0) { %>
+            <div id="ingredient-notification" class="notification is-success has-text-centered">
+                <%= ingredient_success[0] %>
+            </div>
+            <% ingredient_success = [] %>
+        <% } %>
+
+        <script>
+            const added_notification = document.getElementById('added-notification');
+            const success_notification = document.getElementById('success-notification');
+            const no_changes_notification = document.getElementById('no-changes-notification');
+            const missing_notification = document.getElementById('missing-notification');
+            const delete_error= document.getElementById('no-delete-notification');
+            const delete_success = document.getElementById('delete-notification');
+            const ingredient_success = document.getElementById('ingredient-notification');
+
+
+            function remove_notification(element) {
+            element.remove();
+            }
+
+            const notification_duration = 1500;
+
+            if (added_notification) {
+                setTimeout(() => {
+                    remove_notification(added_notification);
+                }, notification_duration);
+            };
+
+            if (success_notification) {
+                setTimeout(() => {
+                    remove_notification(success_notification);
+                }, notification_duration);
+            };
+
+            if (no_changes_notification) {
+                setTimeout(() => {
+                    remove_notification(no_changes_notification);
+                }, notification_duration);
+            };
+
+            if (missing_notification) {
+                setTimeout(() => {
+                    remove_notification(missing_notification);
+                }, notification_duration)
+            };
+
+            if (delete_error) {
+                setTimeout(() => {
+                    remove_notification(delete_error);
+                }, notification_duration);
+            };
+
+            if (delete_success) {
+                setTimeout(() => {
+                    remove_notification(delete_success);
+                }, notification_duration);
+            };
+
+            if (ingredient_success) {
+                setTimeout(() => {
+                    remove_notification(ingredient_success);
+                }, notification_duration);
+            };
+        </script>
 
         <div class="table-container">
             <div class="block column">
@@ -101,14 +209,75 @@
                                     <td><%= location.containerCode %></td>
                                     <td><%= location.capacity %></td>
                                     <td><%= location.availability %></td>
-                                    <td>                                       
-                                        <form method="POST" action="./deletelocation?_method=DELETE">
+                                    <td class="is-vcentered">
+                                        <form id="delete_form_<%= location.locationName %>_<%= location.shelfCode %>_<%= location.containerCode %>" method="POST" action="./deletelocation?_method=DELETE">
                                             <input type="hidden" name="name" value="<%= drug_name %>">
                                             <input type="hidden" name="shelf" value="<%= location.shelfCode %>">
                                             <input type="hidden" name="container" value="<%= location.containerCode %>">
-                                            <button class="button is-danger" type="submit">Delete</button>  
-                                        </form>  
-                                    </td>
+                                            <button class="button is-danger delete-button" data-compound-id="<%= location.locationName %>_<%= location.shelfCode %>_<%= location.containerCode %>">Delete</button>                    
+                                        </form>
+                                    </td>   
+                                    <div id="confirmation_prompt" class="modal is-overlay">
+                                        <div class="modal-background"></div>
+                                        <div class="modal-card">
+                                            <header class="modal-card-head">
+                                                <p class="modal-card-title">Confirm Deletion</p>
+                                                <button class="modal-cancel delete" aria-label="close"></button>
+                                            </header>
+                                            <section class="modal-card-body">
+                                                <p>Are you sure you want to delete this location?</p>
+                                            </section>
+                                            <footer class="modal-card-foot">
+                                                <button class="modal-confirm button is-danger">Delete</button>
+                                                <button class="modal-cancel button">Cancel</button>
+                                            </footer>
+                                        </div>
+                                    </div>  
+                                    <script>
+                                        document.addEventListener('click', function(event) {
+                                        if (event.target.classList.contains('delete-button')) {
+                                            event.preventDefault();
+                                            const deleteButton = event.target;
+                                            const compoundID = deleteButton.getAttribute('data-compound-id');
+                                            confirmation_timing(compoundID);
+                                        }
+                                        });
+
+                                        async function confirmation_timing(compoundID) {
+                                            show_confirmation_prompt()
+                                                .then(confirmation => {
+                                                if (confirmation) {
+                                                    delete_drug(compoundID);
+                                                }
+                                            });
+                                        }
+
+                                        async function show_confirmation_prompt() {
+                                            return new Promise((resolve) => {
+                                                const prompt = document.getElementById('confirmation_prompt');
+                                                prompt.classList.add('is-active');
+
+                                                const confirmed = document.querySelector('.modal-confirm')
+                                                const cancelled = document.querySelectorAll('.modal-cancel')
+
+                                                confirmed.addEventListener('click', () => {
+                                                    prompt.classList.remove('is-active')
+                                                    resolve(true)
+                                                })
+
+                                                cancelled.forEach((element) => {
+                                                    element.addEventListener('click', () => {
+                                                        prompt.classList.remove('is-active')
+                                                        resolve(false)
+                                                    })
+                                                })
+                                            })
+                                        };
+
+                                        async function delete_drug(compoundID) {
+                                            document.getElementById('delete_form_' + compoundID).submit()
+                                        };
+                                    </script>
                                 </tr>
                             <% }) %>
                             <tr class="has-fixed-height">
@@ -165,12 +334,73 @@
                                 <tr class="has-fixed-height">
                                     <td width="80%" class="is-vcentered"><%= ingredient.ingredientName %></td>
                                     <td width="20%" class="has-text-centered">
-                                        <form method="POST" action="./updateingredient?_method=PUT">
+                                        <form id="delete_form_<%= ingredient.ingredientName %>" method="POST" action="./updateingredient?_method=PUT">
                                             <input type="hidden" name="name" value="<%= drug_name %>">
                                             <input type="hidden" name="ingredient" value="<%= ingredient.ingredientName %>">
-                                            <button class="button is-danger" type="submit">Delete</button>  
+                                            <button class="button is-danger delete-button" data-ingredient-name="<%= ingredient.ingredientName %>">Delete</button>                    
                                         </form>    
-                                    </td>               
+                                    </td> 
+                                    <div id="confirmation_prompt" class="modal is-overlay">
+                                        <div class="modal-background"></div>
+                                        <div class="modal-card">
+                                            <header class="modal-card-head">
+                                                <p class="modal-card-title">Confirm Deletion</p>
+                                                <button class="modal-cancel delete" aria-label="close"></button>
+                                            </header>
+                                            <section class="modal-card-body">
+                                                <p>Are you sure you want to delete this associated ingredient?</p>
+                                            </section>
+                                            <footer class="modal-card-foot">
+                                                <button class="modal-confirm button is-danger">Delete</button>
+                                                <button class="modal-cancel button">Cancel</button>
+                                            </footer>
+                                        </div>
+                                    </div>  
+                                    <script>
+                                        document.addEventListener('click', function(event) {
+                                        if (event.target.classList.contains('delete-button')) {
+                                            event.preventDefault();
+                                            const deleteButton = event.target;
+                                            const ingredientName = deleteButton.getAttribute('data-ingredient-name');
+                                            confirmation_timing(ingredientName);
+                                        }
+                                        });
+
+                                        async function confirmation_timing(ingredientName) {
+                                            show_confirmation_prompt()
+                                                .then(confirmation => {
+                                                if (confirmation) {
+                                                    delete_drug(ingredientName);
+                                                }
+                                            });
+                                        }
+
+                                        async function show_confirmation_prompt() {
+                                            return new Promise((resolve) => {
+                                                const prompt = document.getElementById('confirmation_prompt');
+                                                prompt.classList.add('is-active');
+
+                                                const confirmed = document.querySelector('.modal-confirm')
+                                                const cancelled = document.querySelectorAll('.modal-cancel')
+
+                                                confirmed.addEventListener('click', () => {
+                                                    prompt.classList.remove('is-active')
+                                                    resolve(true)
+                                                })
+
+                                                cancelled.forEach((element) => {
+                                                    element.addEventListener('click', () => {
+                                                        prompt.classList.remove('is-active')
+                                                        resolve(false)
+                                                    })
+                                                })
+                                            })
+                                        };
+
+                                        async function delete_drug(ingredientName) {
+                                            document.getElementById('delete_form_' + ingredientName).submit()
+                                        };
+                                    </script>              
                                 </tr>
                             <% }) %>
                             <tr class="has-fixed-height">

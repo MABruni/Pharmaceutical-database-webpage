@@ -129,24 +129,22 @@
         <div class="table-container">
             <div class="block column">
                 <div class="box">
-                    <form action="/vendordrugs/searchinfo" method="POST">
-                        <div class="is-size-4 has-text-weight-bold mb-4">Search by vendor name</div>
+                    <div class="is-size-4 has-text-weight-bold mb-4">Search by vendor name</div>
 
-                        <div class="field">
-                            <div class="control">
-                                <input id="textinput-0" name="vendor_name" type="text" placeholder=""
-                                    class="input ">
-                            </div>
+                    <div class="field">
+                        <div class="control">
+                            <input id="textinput-0" name="textinput-0" type="text" placeholder=""
+                                class="input ">
                         </div>
+                    </div>
 
-                        <div class="field">
-                            <label class="label" for="singlebutton-0"></label>
-                            <div class="control">
-                                <button id="singlebutton-0" name="singlebutton-0"
-                                    class="button is-primary">Search</button>
-                            </div>
+                    <div class="field">
+                        <label class="label" for="singlebutton-0"></label>
+                        <div class="control">
+                            <button id="singlebutton-0" name="singlebutton-0"
+                                class="button is-primary">Search</button>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -195,7 +193,6 @@
                 </div>
             </div>
 
-
             <div class="block column">
                 <div class="box">
                     <div class="has-text-centered is-size-3 has-text-weight-bold mb-4">Drugs sold</div>
@@ -211,33 +208,57 @@
                         </thead>
                         <tbody>
                             <% vendor_data.drugs.forEach(function(drug) { %>
-                                <tr>
-                                    <td class="is-vcentered"><%= drug.drugName %></td>
-                                    <td class="is-vcentered"><%= drug.unitPrice %></td>
-                                    <td class="is-vcentered"><%= drug.discountOffered %></td>
-                                    <td class="is-vcentered has-text-centered"><a href="/vendordrugs/editdrug/<%= drug.drugName %>/<%= vendor_name %>"><button class="button is-link">Edit</button></a></td>                         
-                                    <td class="is-vcentered">
-                                        <form id="delete_form_<%= drug.drugName %>" method="POST" action="/vendordrugs/deletedrug/<%= drug.drugName %>/<%= vendor_name %>?_method=DELETE">
-                                            <button class="button is-danger delete-button" data-drug-name="<%= drug.drugName %>">Delete association</button>                    
+                                <% vendor_data.vendor.forEach(function(vendor) { %>
+                                    <% if (drug.drugName == drugName) { %>
+                                        <form action="../../drugchanges/<%= vendor.vendorName %>?_method=PUT" method="POST">
+                                            <tr>
+                                                <td>
+                                                    <input type="text" name="edit_drugn" value="<%= drug.drugName %>"> 
+                                                    <%= drug.drugName %>
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="edit_unitp" value="<%= drug.unitPrice %>"> 
+                                                    <%= drug.unitPrice %>
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="edit_discount" value="<%= drug.discountOffered %>"> 
+                                                    <%= drug.discountOffered %>
+                                                </td>
+                                                <td class="has-text-centered">
+                                                    <button class="button is-primary" type="submit">Save</button>
+                                                </td>
+                                            </tr>
                                         </form>
-                                    </td>
-                                    <div id="confirmation_prompt" class="modal is-overlay">
-                                        <div class="modal-background"></div>
-                                        <div class="modal-card">
-                                            <header class="modal-card-head">
-                                                <p class="modal-card-title">Confirm Deletion</p>
-                                                <button class="modal-cancel delete" aria-label="close"></button>
-                                            </header>
-                                            <section class="modal-card-body">
-                                                <p>Are you sure you want to delete the drug association with the vendor?</p>
-                                            </section>
-                                            <footer class="modal-card-foot">
-                                                <button class="modal-confirm button is-danger">Delete</button>
-                                                <button class="modal-cancel button">Cancel</button>
-                                            </footer>
-                                        </div>
-                                    </div>        
-                                </tr>
+                                    <% } else { %>
+                                        <tr>
+                                            <td class="is-vcentered"><%= drug.drugName %></td>
+                                            <td class="is-vcentered"><%= drug.unitPrice %></td>
+                                            <td class="is-vcentered"><%= drug.discountOffered %></td>
+                                            <td class="is-vcentered has-text-centered"><a href="/vendordrugs/editdrug/<%= drug.drugName %>/<%= vendor.vendorName %>"><button class="button is-link">Edit</button></a></td>                         
+                                            <td class="is-vcentered">
+                                                <form id="delete_form_<%= drug.drugID %>" method="POST" action="/vendordrugs/deletedrug/<%= drug.drugName %>/<%= vendor.vendorName %>?_method=DELETE">
+                                                    <button class="button is-danger delete-button" data-drug-id="<%= drug.drugID %>">Delete association</button>                    
+                                                </form>
+                                            </td>   
+                                            <div id="confirmation_prompt" class="modal is-overlay">
+                                                <div class="modal-background"></div>
+                                                <div class="modal-card">
+                                                    <header class="modal-card-head">
+                                                        <p class="modal-card-title">Confirm Deletion</p>
+                                                        <button class="modal-cancel delete" aria-label="close"></button>
+                                                    </header>
+                                                    <section class="modal-card-body">
+                                                        <p>Are you sure you want to delete the drug association with the vendor?</p>
+                                                    </section>
+                                                    <footer class="modal-card-foot">
+                                                        <button class="modal-confirm button is-danger">Delete</button>
+                                                        <button class="modal-cancel button">Cancel</button>
+                                                    </footer>
+                                                </div>
+                                            </div>  
+                                        </tr>
+                                    <% } %>
+                                <% }) %>
                             <% }) %>
                         </tbody>
                     </table>
@@ -249,16 +270,16 @@
                 if (event.target.classList.contains('delete-button')) {
                     event.preventDefault();
                     const deleteButton = event.target;
-                    const drugName = deleteButton.getAttribute('data-drug-name');
-                    confirmation_timing(drugName);
+                    const drugID = deleteButton.getAttribute('data-drug-id');
+                    confirmation_timing(drugID);
                 }
                 });
 
-                async function confirmation_timing(drugName) {
+                async function confirmation_timing(drugID) {
                     show_confirmation_prompt()
                         .then(confirmation => {
                         if (confirmation) {
-                            delete_drug(drugName);
+                            delete_drug(drugID);
                         }
                     });
                 }
@@ -285,15 +306,15 @@
                     })
                 };
 
-                async function delete_drug(drugName) {
-                    document.getElementById('delete_form_' + drugName).submit()
+                async function delete_drug(drugID) {
+                    document.getElementById('delete_form_' + drugID).submit()
                 };
             </script>
 
             <div class="block column">
                 <div class="box">
                     <% vendor_data.vendor.forEach(function(vendor) { %>
-                        <form action="adddrug/<%= vendor.vendorName %>" method="POST">
+                        <form action="../adddrug/<%= vendor.vendorName %>" method="POST">
                             <fieldset>
                                 <div class="is-size-4 has-text-weight-bold mb-4">Assign new drug to vendor</div>
 

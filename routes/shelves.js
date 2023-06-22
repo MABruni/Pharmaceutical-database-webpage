@@ -37,11 +37,13 @@ router.get('/editshelf/:shelfCode/:containerCode/:drugName', async function(req,
   })
 })
 
-router.post('/addshelf', get_data_web_add, validate_input, add_data, redirect)
+router.post('/addshelf', get_data_web_add, validate_input, add_data, redirect);
 
 router.put('/shelfchanges', get_data_web_table, check_changes, update_data, no_changes, redirect);
 
-router.delete('/deleteshelf/:shelfCode/:locationName/:room', delete_shelf, redirect)
+router.delete('/deleteshelf/:shelfCode/:locationName/:room', delete_shelf, redirect);
+
+router.post('/searchshelf', get_data_web_search, search_data, search_redirect)
 
 async function get_data_sql(req, res) {
   const select_query = `SELECT Shelves.shelfCode, Shelves.fridge, Shelves.freezer, Locations.locationName, Locations.room, DrugLocations.containerCode, Drugs.drugName, Drugs.drugNDC, DrugLocations.capacity, DrugLocations.availability
@@ -147,10 +149,28 @@ function get_data_web_add(req, res, next) {
   next()
 };
 
+function get_data_web_search(req, res, next) {
+  const [shelfCode, fridge, freezer, locationName, room, containerCode, drugName, drugNDC, capacity, availability]
+  = [req.body.search_code, req.body.search_fridge, req.body.search_freezer, req.body.search_location, req.body.search_room, req.body.search_container, req.body.search_drug, req.body.search_ndc, req.body.search_capacity, req.body.search_availability];
+
+  req.search_shelf = {
+    shelfCode: shelfCode,
+    fridge: fridge,
+    freezer: freezer,
+    locationName: locationName,
+    room: room,
+    containerCode: containerCode,
+    drugName: drugName,
+    drugNDC: drugNDC,
+    capacity: parseInt(capacity),
+    availability: parseInt(availability)
+  };
+
+  next()
+};
+
 function validate_input(req, res, next) {
   const { shelfCode, fridge, freezer, locationName, room, containerCode, drugName, drugNDC, capacity, availability } = req.add_shelf;
-
-  console.log(shelfCode, fridge, freezer, locationName, room, containerCode, drugName, drugNDC, capacity, availability)
 
   if (!shelfCode || !(fridge === 0 || fridge === 1 || freezer === 0 || freezer === 1) || !locationName || !room || !containerCode || !drugName || !drugNDC || !capacity || !availability) {
     req.flash('missing', 'Required fields missing');
@@ -374,6 +394,77 @@ function delete_shelf(req, res, next) {
   });
 };
 
+function search_data(req, res, next) {
+  const { shelfCode, fridge, freezer, locationName, room, containerCode, drugName, drugNDC, capacity, availability } = req.search_shelf;
+  
+  let search_query = `SELECT Shelves.shelfCode, Shelves.fridge, Shelves.freezer, Locations.locationName, Locations.room, DrugLocations.containerCode, Drugs.drugName, Drugs.drugNDC, DrugLocations.capacity, DrugLocations.availability
+  FROM Shelves
+  LEFT JOIN DrugLocations ON DrugLocations.shelfID = Shelves.shelfID
+  LEFT JOIN Drugs ON DrugLocations.drugID = Drugs.drugID
+  LEFT JOIN Locations ON Shelves.locationID = Locations.locationID
+  WHERE 1=1`
+  let params = []
+
+  if (shelfCode) {
+    search_query += " AND Shelves.shelfCode LIKE CONCAT('%', ?, '%')"
+    params.push(shelfCode)
+  }
+
+  if (fridge) {
+    search_query += " AND Shelves.fridge = ?"
+    params.push(fridge)
+  }
+
+  if (freezer) {
+    search_query += " AND Shelves.freezer = ?"
+    params.push(freezer)
+  }
+
+  if (locationName) {
+    search_query += " AND Locations.locationName LIKE CONCAT('%', ?, '%')"
+    params.push(locationName)
+  }
+
+  if(room) {
+    search_query += " AND Locations.room LIKE CONCAT('%', ?, '%')"
+    params.push(room)
+  }
+
+  if (containerCode) {
+    search_query += " AND DrugLocations.containerCode LIKE CONCAT('%', ?, '%')"
+    params.push(containerCode)
+  }
+
+  if (drugName) {
+    search_query += " AND Drugs.drugName LIKE CONCAT('%', ?, '%')"
+    params.push(drugName)
+  }
+
+  if (drugNDC) {
+    search_query += " AND Drugs.drugNDC LIKE CONCAT('%', ?, '%')"
+    params.push(drugNDC)
+  }
+
+  if (capacity) {
+    search_query += " AND DrugLocations.capacity LIKE CONCAT('%', ?, '%')"
+    params.push(capacity)
+  }
+
+  if (availability) {
+    search_query += " AND DrugLocations.availability LIKE CONCAT('%', ?, '%')"
+    params.push(availability)
+  }
+  
+  db.pool.query(search_query, params, (error, results) => {
+    if (error) {
+      return next(error);
+    } else {
+      req.search = results
+      next()
+    }
+  })
+};
+
 function no_changes(req,res,next) {
   req.flash('no_changes', 'No changes were made')
   req.flash('success', null)
@@ -384,5 +475,32 @@ function no_changes(req,res,next) {
 function redirect(req, res) {
   res.redirect('/shelves');
 }
+
+function search_redirect(req, res) {
+  const formatted_data = (req.search).map(shelf => ({
+    ...shelf,
+    fridge: shelf.fridge.readUInt8() === 1 ? 'true' : 'false',
+    freezer: shelf.freezer.readUInt8() === 1 ? 'true' : 'false',
+}));
+
+  const success_message = req.flash('success');
+  const no_changes_message = req.flash('no_changes')
+  const missing_message = req.flash('missing')
+  const added_message = req.flash('drug_added')
+  const delete_error = req.flash('delete_error')
+  const delete_success = req.flash('delete_success')
+
+  res.render(
+    './shelves.ejs',
+    {
+      shelf_data: formatted_data,
+      success_message: success_message,
+      no_changes_message: no_changes_message,
+      missing_message: missing_message,
+      added_message: added_message,
+      delete_error: delete_error,
+      delete_success: delete_success
+    });
+};
 
 module.exports = router;

@@ -121,8 +121,8 @@ function get_data_web_search(req, res, next) {
     drugForm: drug_form,
     drugATC: drug_atc,
     drugNDC: drug_ndc,
-    storeFridge: drug_fridge === 'true' ? 1 : 0,
-    storeFreezer: drug_freezer === 'true' ? 1 : 0,
+    storeFridge: drug_fridge,
+    storeFreezer: drug_freezer,
     totalQuantity: parseInt(drug_quantity),
     earlyExpiration: drug_expiration
   };
@@ -139,7 +139,7 @@ function validate_input(req, res, next) {
   } else {
     next()
   }
-}
+};
 
 function add_data(req, res, next) {
   const { drugName, drugPropName, drugStrength, drugForm, drugATC, drugNDC, storeFridge, storeFreezer, totalQuantity, earlyExpiration } = req.add_drug;
@@ -155,7 +155,7 @@ function add_data(req, res, next) {
       next()
     }
   })
-}
+};
 
 function search_data(req, res, next) {
   const { drugName, drugPropName, drugStrength, drugForm, drugATC, drugNDC, storeFridge, storeFreezer, totalQuantity, earlyExpiration } = req.search_data;
@@ -221,7 +221,7 @@ function search_data(req, res, next) {
       next()
     }
   })
-}
+};
 
 async function check_changes(req,res,next) {
   const { drugName, drugPropName, drugStrength, drugForm, drugATC, drugNDC, storeFridge, storeFreezer, totalQuantity, earlyExpiration } = req.drugData;
@@ -290,18 +290,18 @@ function delete_data(req, res, next) {
       }, 500);
     }
   })
-}
+};
 
 function no_changes(req,res,next) {
   req.flash('no_changes', 'No changes were made')
   req.flash('success', null)
 
   redirect(req, res, next);
-}
+};
 
 function redirect(req, res) {
   res.redirect('/');
-}
+};
 
 function search_redirect(req, res) {
   const formatted_data = (req.search).map(drug => ({

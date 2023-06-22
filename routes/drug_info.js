@@ -91,11 +91,26 @@ router.get('/:drugName', async function(req,res) {
 
   try {
     const info_data = await fetch_drug_info();
+    const success_message = req.flash('success');
+    const no_changes_message = req.flash('no_changes')
+    const missing_message = req.flash('missing')
+    const added_message = req.flash('location_added')
+    const delete_error = req.flash('delete_error')
+    const delete_success = req.flash('delete_success')
+    const ingredient_success = req.flash('ingredient_added')
+  
 
     res.render('druginfo.ejs', {
       drug_name: drug_name,
       info_data: info_data,
-      not_found_message: not_found_message
+      not_found_message: not_found_message,
+      success_message: success_message,
+      no_changes_message: no_changes_message,
+      missing_message: missing_message,
+      added_message: added_message,
+      delete_error: delete_error,
+      delete_success: delete_success,
+      ingredient_success: ingredient_success
     })
   } catch (error) {
     console.error(error);
@@ -156,36 +171,32 @@ router.post('/addlocation', async function(req,res) {
   VALUES (?, ?, ?, ?, ?);
   `;
 
-  async function fetch_shelfID() {
-    return new Promise((resolve, reject) => {
-      db.pool.query(query1, [loc_name, room, shelf, fridge, freezer], function(err, results) {
-        if (err) {
-          reject(err);
+  db.pool.query(query1, [loc_name, room, shelf, fridge, freezer], function(q1_error, q1_results) {
+    if (q1_error) {
+      return q1_error;
+    } else {
+
+      const shelfID = q1_results[0].shelfID
+
+      db.pool.query(query2, [drug_name], function(q2_error, q2_results) {
+        if (q2_error) {
+          return q2_error;
         } else {
-          resolve(results[0].shelfID);
+
+          const drugID = q2_results[0].drugID
+
+          db.pool.query(insert_query, [drugID, shelfID, container, capacity, availability], (q3_error, q3_results) => {
+            if (q3_error) {
+              return q3_error
+            }
+
+            req.flash('location_added', 'Location added succesfully')
+            res.redirect(`/druginformation/${drug_name}`)
+          })
         }
       })
-    })
-  };
-
-  async function fetch_drugID() {
-    return new Promise((resolve, reject) => {
-      db.pool.query(query2, [drug_name], function(err, results) {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(results[0].drugID);
-        }
-      })
-    })
-  };
-
-  const shelf_id = await fetch_shelfID();
-  const drug_id = await fetch_drugID();
-
-  const loc_inserted = await db.pool.query(insert_query, [drug_id, shelf_id, container, capacity, availability])
-
-  res.redirect('/druginformation/' + encodeURIComponent(drug_name));
+    }
+  })
 });
 
 router.post('/addingredient', function(req,res) {
@@ -200,6 +211,7 @@ router.post('/addingredient', function(req,res) {
 
   const ingredient_insert = db.pool.query(insert_query, [drug_name, new_ingredient])
 
+  req.flash('ingredient_added', 'Ingredient added succesfully')
   res.redirect('/druginformation/' + encodeURIComponent(drug_name));
 })
 

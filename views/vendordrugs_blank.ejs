@@ -12,7 +12,7 @@
             <section class="navbar-start">
                 <a class="navbar-item" href="/">Dashboard</a>
                 <a class="navbar-item" href="/orders">Orders</a>
-                <a class="navbar-item" href="/vendors">Vendor</a>
+                <a class="navbar-item" href="/vendors">Vendors</a>
                 <a class="navbar-item" href="/vendordrugs">Vendor Drugs</a>
                 <a class="navbar-item" href="/locations">Locations</a>
                 <a class="navbar-item" href="/shelves">Shelves Information</a>
@@ -28,25 +28,31 @@
 
 <body>
     <article class="container is-fluid">
+        <header>
+            <h1 class="has-text-centered is-size-2 has-text-weight-bold mb-4">Vendor Information</h1>
+        </header>
+
         <div class="table-container">
             <div class="block column">
                 <div class="box">
-                    <div class="is-size-4 has-text-weight-bold mb-4">Search by vendor name</div>
+                    <form action="/vendordrugs/searchinfo" method="POST">
+                        <div class="is-size-4 has-text-weight-bold mb-4">Search by vendor name</div>
 
-                    <div class="field">
-                        <div class="control">
-                            <input id="textinput-0" name="textinput-0" type="text" placeholder=""
-                                class="input ">
+                        <div class="field">
+                            <div class="control">
+                                <input id="textinput-0" name="vendor_name" type="text" placeholder=""
+                                    class="input ">
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="field">
-                        <label class="label" for="singlebutton-0"></label>
-                        <div class="control">
-                            <button id="singlebutton-0" name="singlebutton-0"
-                                class="button is-primary">Search</button>
+                        <div class="field">
+                            <label class="label" for="singlebutton-0"></label>
+                            <div class="control">
+                                <button id="singlebutton-0" name="singlebutton-0"
+                                    class="button is-primary">Search</button>
+                            </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>

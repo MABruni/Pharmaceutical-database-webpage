@@ -36,11 +36,6 @@ app.use('/shelves', shelves_router);
 app.use('/ingredients', ingredients_router);
 
 
-app.use(express.static(path.join(__dirname, '/html')));
-
-/*
-    LISTENER
-*/
 app.listen(PORT, function() {
-  console.log('Express started on http://localhost:' + PORT + '; press Ctrl-C to terminate.')
+  console.log('Express started on http://localhost:' + PORT)
 });

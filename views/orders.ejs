@@ -12,7 +12,7 @@
             <section class="navbar-start">
                 <a class="navbar-item" href="/">Dashboard</a>
                 <a class="navbar-item" href="/orders">Orders</a>
-                <a class="navbar-item" href="/vendors">Vendor</a>
+                <a class="navbar-item" href="/vendors">Vendors</a>
                 <a class="navbar-item" href="/vendordrugs">Vendor Drugs</a>
                 <a class="navbar-item" href="/locations">Locations</a>
                 <a class="navbar-item" href="/shelves">Shelves Information</a>
@@ -201,14 +201,14 @@
                 <div class="block column">
                     <div class="box">
 
-                        <form action="">
+                        <form action="/orders/searchorders" method="POST">
                             <fieldset>
                                 <legend class="is-size-4 has-text-weight-bold mb-4">Search Orders</legend>
 
                                 <div class="field">
                                     <label class="label" for="textinput-0">Status</label>
                                     <div class="control">
-                                        <input id="textinput-0" name="textinput-0" type="text" placeholder=""
+                                        <input id="textinput-0" name="search_status" type="text" placeholder=""
                                             class="input ">
                                     </div>
                                 </div>
@@ -216,7 +216,7 @@
                                 <div class="field">
                                     <label class="label" for="textinput-0">Drug Name</label>
                                     <div class="control">
-                                        <input id="textinput-0" name="textinput-0" type="text" placeholder=""
+                                        <input id="textinput-0" name="search_drugn" type="text" placeholder=""
                                             class="input ">
                                     </div>
                                 </div>
@@ -224,7 +224,7 @@
                                 <div class="field">
                                     <label class="label" for="textinput-0">Drug NDC</label>
                                     <div class="control">
-                                        <input id="textinput-0" name="add_ndc" type="text" placeholder=""
+                                        <input id="textinput-0" name="search_ndc" type="text" placeholder=""
                                             class="input ">
                                     </div>
                                 </div>
@@ -233,7 +233,7 @@
                                     <div class="column">
                                         <label class="label" for="name">Vendor Name</label>
                                         <div class="control">
-                                            <input class="input" type="text" id="drugStrength" name="drug_strength" />
+                                            <input class="input" type="text" id="drugStrength" name="search_vname" />
                                         </div>
                                     </div>
                                 </div>
@@ -242,7 +242,7 @@
                                     <div class="column">
                                         <label class="label" for="name">Order Date</label>
                                         <div class="control">
-                                            <input class="input" type="text" id="drugStrength" name="drug_strength" />
+                                            <input class="input" type="text" id="drugStrength" name="search_orderd" />
                                         </div>
                                     </div>
                                 </div>
@@ -250,7 +250,7 @@
                                 <div class="field">
                                     <label class="label" for="textinput-0">Quantity</label>
                                     <div class="control">
-                                        <input id="textinput-0" name="textinput-0" type="text" placeholder=""
+                                        <input id="textinput-0" name="search_quantity" type="text" placeholder=""
                                             class="input ">
                                     </div>
                                 </div>
@@ -258,7 +258,7 @@
                                 <div class="field">
                                     <label class="label" for="textinput-0">Expiry Date</label>
                                     <div class="control">
-                                        <input id="textinput-0" name="textinput-0" type="text" placeholder=""
+                                        <input id="textinput-0" name="search_expiration" type="text" placeholder=""
                                             class="input ">
                                     </div>
                                 </div>
@@ -266,7 +266,7 @@
                                 <div class="field">
                                     <label class="label" for="textinput-0">Lot Number</label>
                                     <div class="control">
-                                        <input id="textinput-0" name="textinput-0" type="text" placeholder=""
+                                        <input id="textinput-0" name="search_lot" type="text" placeholder=""
                                             class="input ">
                                     </div>
                                 </div>
@@ -274,17 +274,16 @@
                                 <div class="field">
                                     <label class="label" for="textinput-0">Total Price</label>
                                     <div class="control">
-                                        <input id="textinput-0" name="textinput-0" type="text" inputmode="numeric"
+                                        <input id="textinput-0" name="search_price" type="text" inputmode="numeric"
                                             placeholder="" class="input ">
                                     </div>
                                 </div>
 
-                                <!-- Button -->
                                 <div class="field">
                                     <label class="label" for="singlebutton-0"></label>
                                     <div class="control">
                                         <button id="singlebutton-0" name="singlebutton-0"
-                                            class="button is-primary">Search</button>
+                                            class="button is-primary" type="submit">Search</button>
                                     </div>
                                 </div>
                             </fieldset>
